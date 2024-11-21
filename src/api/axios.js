@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// con condiciones de subida a producción
 const isProduction = import.meta.env.VITE_ENV === "production";
 console.log("isProduction", isProduction);
 console.log("import.meta.env", import.meta.env.VITE_APP_BASE_URL_PROD);
@@ -11,7 +11,7 @@ const instance = axios.create({
     withCredentials: true,
 });
 
-
+// Instancia para las rutas de entrevista
 const instanceInterview = axios.create({
     baseURL: isProduction
         ? (import.meta.env.VITE_APP_BASE_URL_PROD || "https://plataformainterviewsim-180808156072.us-central1.run.app/interview")
