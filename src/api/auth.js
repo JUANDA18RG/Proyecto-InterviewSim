@@ -27,3 +27,10 @@ export const getGradesTeacherRequest = () => instance.get(`/getGradesTeacher`);
 export const updateProfileRequest = (formData) => instance.put(`/updateProfile`, formData, {
   headers: { 'Content-Type': 'multipart/form-data' }
 });
+
+
+// Recuperar contraseña
+export const recoveryPasswordRequest = (email, role) => instance.post(`/recoveryPassword`, { email, role });
+
+// Restablecer contraseña
+export const resetPasswordRequest = (token, newPassword) => instance.post(`/resetPassword`, { token, newPassword });

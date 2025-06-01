@@ -5,7 +5,9 @@ import Select from "react-select";
 import { languageOptions } from "../api/languajeOptions";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { CalificacionRecomendacionProgramacion } from "../api/interview"; // Asegúrate de tener esta función correctamente implementada y exportada.
+import { CalificacionRecomendacionProgramacion } from "../api/interview";
+import { useTheme } from "../context/themeContext";
+import { t } from "../i18n";
 
 const BottomCompilar = ({
   IAresult,
@@ -24,6 +26,7 @@ const BottomCompilar = ({
   const [selectedLanguage, setSelectedLanguage] = useState(languageOptions[0]);
   const [processing, setProcessing] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
+  const { language } = useTheme();
 
   // Definir las constantes reutilizables
   const RAPID_API_URL = "https://judge0-ce.p.rapidapi.com/submissions";
@@ -142,18 +145,17 @@ const BottomCompilar = ({
   };
 
   return (
-    <div className="min-h-screen w-full p-5 bg-[#cbe2fe] dark:bg-gray-900 text-gray-900 dark:text-gray-200">
-      <div className="flex h-full w-full overflow-hidden space-x-5 bg-[#cbe2fe]">
+    <div className="h-full w-full  bg-[#cbe2fe] dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+      <div className="flex h-full w-full overflow-hidden space-x-5 bg-[#cbe2fe] dark:bg-gray-900 p-2 rounded-xl">
         <div className="flex flex-col w-1/2 h-full space-y-5">
           <div className="flex flex-col w-full h-2/3 p-5 overflow-y-auto justify-center items-center rounded-xl bg-gradient-to-br from-[#283e56] to-[#4fc3f7] border-2 border-[#ffd700] shadow-lg">
-            <div className="flex flex-col bg-white rounded-lg p-6 space-y-6 justify-center items-center">
+            <div className="flex flex-col bg-white rounded-lg p-6 space-y-6 justify-center items-center dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 dark:text-white">
               <div className="text-center mb-4">
-                <h2 className="text-2xl font-extrabold text-gray-900">
-                  Preguntas de la Entrevista con IA
+                <h2 className="text-2xl font-extrabold ">
+                  {t("Questions_generated_us_IA", language)}
                 </h2>
                 <p className="text-gray-500">
-                  Responde cuidadosamente a cada pregunta para ayudar a tu
-                  aprendizaje
+                  {t("responses_by_interview_text", language)}
                 </p>
               </div>
               <div
@@ -166,18 +168,20 @@ const BottomCompilar = ({
                       key={index}
                       className="w-full border-4 text-center p-6 rounded-lg space-y-4 mx-auto"
                     >
-                      <h3 className="text-xl font-bold text-gray-800">
+                      <h3 className="text-xl font-bold ">
                         {question.question}
                       </h3>
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-700">No hay preguntas disponibles.</p>
+                  <p className="text-gray-700">
+                    {t("nothin_questions", language)}
+                  </p>
                 )}
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-[#283e56] to-[#4fc3f7] rounded-xl border-2 border-[#ffd700] shadow-lg h-1/3 w-full flex items-center justify-center overflow-y-auto">
+          <div className="bg-gradient-to-br from-[#283e56] to-[#4fc3f7] rounded-xl border-2 border-[#ffd700] shadow-lg h-1/3 w-full flex items-center justify-center overflow-y-auto dark:bg-gray-900 dark:border-yellow-600 dark:text-black">
             {recommendations.length > 0 ? (
               <div className="p-4">
                 {recommendations.map((rec, index) => (
@@ -187,10 +191,10 @@ const BottomCompilar = ({
                   >
                     <div className="absolute top-0 right-0 mt-2 mr-2 bg-blue-600  p-3 rounded-lg flex items-center shadow-lg">
                       <div className="flex items-center">
-                        <span className="text-lg font-bold text-white">
-                          Calificación:
+                        <span className="text-lg font-bold ">
+                          {t("calification", language)}:
                         </span>
-                        <span className="ml-2 text-lg text-white">
+                        <span className="ml-2 text-lg ">
                           {rec.calificacion}
                         </span>
                         <svg
@@ -209,11 +213,11 @@ const BottomCompilar = ({
                         </svg>
                       </div>
                     </div>
-                    <div className="text-gray-800 mt-12">
-                      <p className="font-bold text-lg">Recomendación:</p>
-                      <p className="mt-1 text-gray-600  text-lg">
-                        {rec.recomendacion}
+                    <div className="p-2">
+                      <p className="font-bold text-lg">
+                        {t("recomendations", language)}:
                       </p>
+                      <p className="mt-1   text-lg">{rec.recomendacion}</p>
                     </div>
                   </div>
                 ))}
@@ -221,7 +225,7 @@ const BottomCompilar = ({
             ) : (
               <div className="h-full  w-full flex items-center justify-center">
                 <div className="flex bg-white opacity-65 p-2 rounded-lg">
-                  <h3>No hay recomendaciones disponibles todavia</h3>
+                  <h3>{t("nothing_recomended_exiting", language)}</h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -254,10 +258,12 @@ const BottomCompilar = ({
               disabled={!code || processing}
               className="border-2 border-white rounded-lg px-4 py-2 bg-gradient-to-t from-blue-500 to-blue-400 text-white cursor-pointer"
             >
-              {processing ? "Compilando..." : "Compilar y Ejecutar"}
+              {processing
+                ? t("compiled", language)
+                : t("compiled_and_Executed", language)}
             </button>
           </div>
-          <div className="flex flex-col w-full h-full justify-between">
+          <div className="flex flex-col w-full h-full justify-between gap-2">
             <WindowEditor
               code={code}
               onChange={onChange}

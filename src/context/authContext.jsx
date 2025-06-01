@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [errorMesage, setErrorMesage] = useState(null);
 
-  // Limpieza de sesión y localStorage
   const cleanSession = () => {
     setUser(null);
     setIsAuthenticated(false);
@@ -35,29 +34,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Borra el token cada vez que se monta el contexto (recarga)
-    localStorage.removeItem("token");
-    Cookies.remove("token");
-    setUser(null);
-    setIsAuthenticated(false);
-  }, []);
-
-  useEffect(() => {
     const checkLogin = async () => {
       setLoading(true);
-      const token = localStorage.getItem("token");
-      if (!token) {
-        cleanSession();
-        setLoading(false);
-        return;
-      }
+      const token = localStorage.getItem("token") || Cookies.get("token");
+
       try {
-        const response = await verifyTokenRequest();
-        if (response.data.error) {
+        if (!token) {
           cleanSession();
+          setLoading(false);
+          return;
         } else {
-          setIsAuthenticated(true);
+          const response = await verifyTokenRequest(token);
+          if (response.data.error) {
+            cleanSession();
+            setLoading(false);
+            return;
+          }
           setUser(response.data);
+          setIsAuthenticated(true);
+          setErrorMesage(null);
         }
       } catch (error) {
         cleanSession();
@@ -97,15 +92,16 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       setLoading(true);
-      const response = await registerRequest(userData);
-      setUser(response.data);
-      setIsAuthenticated(true);
       setErrorMesage(null);
+      const response = await registerRequest(userData);
       localStorage.setItem("token", response.data.tokenSession);
+      if (response.status === 200) {
+        return { error: false, message: "Registro exitoso" };
+      }
     } catch (error) {
-      setErrorMesage(
-        error.response ? error.response.data : error.message
-      );
+      const errorMessage =
+        error.response?.data?.message || error.message || "Error desconocido";
+      setErrorMesage(errorMessage);
       throw error;
     } finally {
       setLoading(false);
@@ -116,7 +112,8 @@ export const AuthProvider = ({ children }) => {
     try {
       await logoutRequest();
     } catch (error) {
-      // No importa si falla, igual limpiamos la sesión
+      console.error("Error signing out:", error);
+      setErrorMesage(error.response ? error.response.data : error.message);
     } finally {
       cleanSession();
     }
@@ -127,6 +124,7 @@ export const AuthProvider = ({ children }) => {
       await deleteUserRequest(userData);
       cleanSession();
     } catch (error) {
+      console.error("Error deleting user:", error);
       cleanSession();
     }
   };

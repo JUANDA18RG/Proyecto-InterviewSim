@@ -42,7 +42,7 @@ function AreaInterview() {
   return (
     <div className="h-screen w-full p-5 bg-[#cbe2fe] dark:bg-gray-900 text-gray-900 dark:text-gray-200">
       <div className="flex flex-col items-start h-full">
-        <div className="w-full flex flex-row justify-between items-center rounded-lg space-x-4 lg:space-x-6 mx-auto bg-white dark:bg-gray-900 border-2 border-[#ffd700] shadow-lg" style={{boxShadow: '0 4px 16px 0 rgba(40,62,86,0.15)'}}>
+        <div className="w-full flex flex-row justify-between items-center rounded-lg space-x-4 lg:space-x-6 mx-auto ">
           <button
             onClick={Back}
             className="rounded-full p-2 lg:p-3 bg-gradient-to-br from-[#283e56] to-[#4fc3f7] border-2 border-[#ffd700] hover:scale-110 transform duration-200 ease-in-out"
@@ -102,7 +102,7 @@ function AreaInterview() {
             </svg>
           </Link>
         </div>
-        <div className="w-full flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 h-full overflow-hidden mt-5">
+        <div className="w-full flex flex-col lg:flex-row  lg:space-y-0 lg:space-x-5 h-full overflow-hidden mt-5">
           <div className="w-full flex flex-col space-y-5 h-full">
             {interview.tipoEntrevista === "programacion" && (
               <ProgramacionEntrevista

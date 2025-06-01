@@ -27,17 +27,20 @@
     margin: 0 auto;
   }                       
 
-/* Esto aplica a toda la barra de desplazamiento */
 ::-webkit-scrollbar {
   width: 10px;
-  border-radius: 5px; 
-  @apply bg-gray-200 dark:bg-gray-700;
+  border-radius: 5px;
+  background-color: #e5e7eb; /* Color de fondo del track */
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-purple-400 via-orange-400 to-red-400 dark:from-purple-500 dark:via-orange-500 dark:to-red-500;
-  border-radius: 5px; 
-  z-index: 1000; 
+  background: linear-gradient(180deg, #0f52ba 0%, #87ceeb 50%, #ffd700 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #e5e7eb; /* Color del track */
+  border-radius: 5px;
 }
 
 

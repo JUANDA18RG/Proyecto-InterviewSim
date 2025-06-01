@@ -60,19 +60,19 @@ function Navbar() {
                 <>
                   <div className="flex items-center justify-center">
                     <p className="text-xl font-bold text-gray-900 mr-5 hidden lg:block md:text-base">
-                      {t('welcome_student', language)}
+                      {t("welcome_student", language)}
                     </p>
 
                     <MenuButton
-                      className={`flex h-10 items-center rounded-3xl animate-jump-in bg-white text-gray-900`}
+                      className={`flex h-10 items-center rounded-3xl animate-jump-in bg-white dark:bg-gray-800 border border-[#ffd700]  dark:border-yellow-600  shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white`}
                     >
                       <img
-                        className={`w-14 h-14 rounded-full p-1 md:block text-sm md:text-base font-bold text-gray-900 `}
+                        className={`w-14 h-14 rounded-full p-1 md:block text-sm md:text-base font-bold  `}
                         src={profileImage}
                         alt="Profile"
                       />
                       <span
-                        className={`sm:text-xl md:text-sm font-bold hidden md:block mr-1 text-gray-900`}
+                        className={`sm:text-xl md:text-sm font-bold hidden md:block mr-1 `}
                       >
                         {user.userName}
                       </span>
@@ -96,18 +96,19 @@ function Navbar() {
                     </MenuButton>
                   </div>
                   <MenuItems
-                    className="absolute p-1 top-20 right-0 w-52 rounded-md translate-y-5 border-2 shadow-sm md:text-sm animate-jump-in z-50
-                        bg-white text-gray-900 border-gray-400"
+                    className="absolute p-1 top-20 right-0 w-52  translate-y-5  md:text-sm animate-jump-in z-50
+                  bg-white
+                        dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                   >
-                    <MenuItem className="hover:bg-gradient-to-t from-purple-500  to-purple-400 rounded-lg ease-in-out m-1 border-2 border-white">
+                    <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                       {(active) => (
                         <Link
                           to={"/profile"}
                           className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                            active && "bg-white hover:text-white  font-bold"
+                            active && "bg-white   font-bold"
                           }`}
                         >
-                          {t('profile', language)}
+                          {t("profile", language)}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -125,15 +126,15 @@ function Navbar() {
                         </Link>
                       )}
                     </MenuItem>
-                    <MenuItem className="hover:bg-gradient-to-t from-emerald-500  to-emerald-400 rounded-lg ease-in-out m-1 border-2 border-white">
+                    <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                       {(active) => (
                         <Link
                           className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                            active && "bg-white hover:text-white font-bold"
+                            active && "bg-white  font-bold"
                           }`}
                           to={"/settings"}
                         >
-                          {t('settings', language)}
+                          {t("settings", language)}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -156,15 +157,15 @@ function Navbar() {
                         </Link>
                       )}
                     </MenuItem>
-                    <MenuItem className="hover:bg-gradient-to-t from-red-500  to-red-400 rounded-lg ease-in-out m-1 border-2 border-white">
+                    <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                       {(active) => (
                         <Link
                           className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                            active && "bg-white hover:text-white font-bold"
+                            active && "bg-white  font-bold"
                           }`}
                           onClick={handleSignOut}
                         >
-                          {t('signoff', language)}
+                          {t("signoff", language)}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

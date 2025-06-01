@@ -2,7 +2,7 @@ import Logo from "../assets/Logo.png";
 
 export default function Spinner() {
   return (
-    <div className="flex justify-center items-center w-full h-full min-h-screen relative">
+    <div className="flex justify-center items-center w-full h-full min-h-screen relative bg-white dark:bg-gray-900">
       <div role="status" className="flex flex-col items-center">
         <svg
           aria-hidden="true"

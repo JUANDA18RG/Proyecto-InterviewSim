@@ -53,7 +53,7 @@ function Tips() {
   };
 
   return (
-    <div className="flex items-center justify-center  h-full w-full overflow-hidden rounded-lg">
+    <div className="flex items-center justify-center  h-full w-full overflow-hidden rounded-lg p-4">
       <div className="flex justify-center items-center h-full w-full">
         <div className="flex w-full h-full">
           <div
@@ -94,7 +94,7 @@ function Tips() {
             <button
               onClick={goToPreviousSlide}
               type="button"
-              className="flex absolute top-1/2 left-3 z-40 items-center justify-center w-10 h-10 bg-gray-200/50 rounded-full hover:bg-gradient-to-r from-indigo-500 via-blue-500 to-green-500 transition-transform duration-300 ease-in-out"
+              className="flex absolute top-1/2 left-3 z-40 items-center justify-center w-10 h-10 dark:bg-gray-800 border border-[#ffd700] bg-white dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@ function Tips() {
             <button
               onClick={goToNextSlide}
               type="button"
-              className="flex absolute top-1/2 right-3 z-40 items-center justify-center w-10 h-10 bg-gray-100 bg-opacity-50 rounded-full hover:bg-gradient-to-r from-fuchsia-400 via-purple-400 to-red-400  transition-transform duration-300 ease-in-out"
+              className="flex absolute top-1/2 right-3 z-40 items-center justify-center w-10 h-10 dark:bg-gray-800 border border-[#ffd700] bg-white dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

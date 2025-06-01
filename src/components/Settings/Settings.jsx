@@ -1,7 +1,6 @@
 import { useAuth } from "../../context/authContext";
 import { useTheme } from "../../context/themeContext";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { t } from "../../i18n";
 
 function Settings() {
@@ -9,19 +8,13 @@ function Settings() {
   const { theme, language, toggleTheme, changeLanguage } = useTheme();
   const [notifications, setNotifications] = useState(true);
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors, touchedFields, dirtyFields } 
-  } = useForm();
-
   const Back = () => {
     window.history.back();
   };
 
   return (
     <div className="h-screen w-full p-5 overflow-auto bg-[#cde5ff] dark:bg-gray-900">
-      <div className="mt-12 flex flex-col items-center h-full w-full">
+      <div className=" flex flex-col items-center h-full w-full">
         {/* Botón de regreso */}
         <div className="w-full flex justify-start mb-4">
           <button
@@ -48,25 +41,29 @@ function Settings() {
         {/* Título */}
         <div className="w-full max-w-2xl mb-6 border-2 border-[#ffd700]">
           <h2 className="text-4xl font-extrabold text-black dark:text-white text-center bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-xl py-4 shadow-lg">
-            {t('settings', language)}
+            {t("settings", language)}
           </h2>
         </div>
 
         {/* Configuración de tema */}
         <div className="w-full max-w-2xl mb-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-[#ffd700]">
-          <h3 className="text-2xl font-bold mb-4 text-black dark:text-white">{t('theme', language)}</h3>
+          <h3 className="text-2xl font-bold mb-4 text-black dark:text-white">
+            {t("theme", language)}
+          </h3>
           <div className="flex items-center justify-between border-2 border-[#ffd700] rounded-lg p-2">
-            <span className="text-black dark:text-gray-300">{t('darkMode', language)}</span>
+            <span className="text-black dark:text-gray-300">
+              {t("darkMode", language)}
+            </span>
             <button
               onClick={toggleTheme}
               className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#ffd700] focus:ring-offset-2 border-2 border-[#ffd700]"
               style={{
-                backgroundColor: theme === 'dark' ? '#4B5563' : '#E5E7EB'
+                backgroundColor: theme === "dark" ? "#4B5563" : "#E5E7EB",
               }}
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out ${
-                  theme === 'dark' ? 'translate-x-6' : 'translate-x-1'
+                  theme === "dark" ? "translate-x-6" : "translate-x-1"
                 }`}
               />
             </button>
@@ -75,36 +72,39 @@ function Settings() {
 
         {/* Configuración de idioma */}
         <div className="w-full max-w-2xl mb-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-[#ffd700]">
-          <h3 className="text-2xl font-bold mb-4 text-black dark:text-white">{t('language', language)}</h3>
-          <div className="flex space-x-4 border-2 border-[#ffd700] rounded-lg p-2">
+          <h3 className="text-2xl font-bold mb-4 text-black dark:text-white">
+            {t("language", language)}
+          </h3>
+          <div className="flex space-x-4 border-2 border-[#ffd700] rounded-lg p-2 justify-center items-center">
             <button
-              onClick={() => changeLanguage('es')}
+              onClick={() => changeLanguage("es")}
               className={`px-4 py-2 rounded-lg border-2 border-[#ffd700] ${
-                language === 'es'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                language === "es"
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
               }`}
             >
-              {t('spanish', language)}
+              {t("spanish", language)}
             </button>
             <button
-              onClick={() => changeLanguage('en')}
+              onClick={() => changeLanguage("en")}
               className={`px-4 py-2 rounded-lg border-2 border-[#ffd700] ${
-                language === 'en'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                language === "en"
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
               }`}
             >
-              {t('english', language)}
+              {t("english", language)}
             </button>
           </div>
         </div>
 
         {/* Notificaciones */}
-        <div className="mt-10 rounded-2xl shadow-md p-6 flex flex-col md:flex-row md:items-center md:justify-between 
-          bg-gradient-to-tr from-blue-100 via-purple-100 to-pink-100 bg-opacity-80 border-2 border-[#ffd700]">
-          <h3 className="text-lg font-bold text-black mb-4 md:mb-0">{t('notifications', language)}</h3>
-          <div className="flex items-center space-x-4">
+        <div className="w-full max-w-2xl mb-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-[#ffd700]">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full space-x-4">
+            <h3 className="text-lg font-extrabold text-black dark:text-white text-center bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-xl py-4 ">
+              {t("notifications", language)}
+            </h3>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
@@ -113,24 +113,26 @@ function Settings() {
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r from-blue-500 to-purple-500"></div>
-              <span className="ml-3 text-md font-medium text-black">
-                {t('enableNotifications', language)}
-              </span>
             </label>
           </div>
         </div>
 
         {/* Cuenta */}
-        <div className="mt-10 rounded-2xl shadow-md p-6 flex flex-col space-y-2 
-          bg-gradient-to-tr from-blue-100 via-purple-100 to-pink-100 bg-opacity-80 border-2 border-[#ffd700]">
-          <h3 className="text-lg font-bold text-black mb-2">{t('account', language)}</h3>
-          <div className="flex items-center justify-between">
-            <span className="text-black">{t('email', language)}</span>
+        <div className=" w-full max-w-2xl mb-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-[#ffd700]">
+          <h3 className=" text-xl font-extrabold text-black dark:text-white text-center bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-xl py-4 ">
+            {t("account", language)}
+          </h3>
+          <div className="flex items-center justify-between p-2 space-x-2">
+            <span className="text-lg font-extrabold text-black dark:text-white text-center bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-xl">
+              {t("email", language)}
+            </span>
             <span className="font-medium">{user?.email}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-black">{t('role', language)}</span>
-            <span className="font-medium capitalize">{user?.role}</span>
+          <div className="flex items-center justify-between p-2 space-x-2">
+            <span className="text-lg font-extrabold text-black dark:text-white text-center bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 rounded-xl">
+              {t("role", language)}
+            </span>
+            <span className="font-medium capitalize ">{user?.role}</span>
           </div>
         </div>
       </div>
@@ -138,4 +140,4 @@ function Settings() {
   );
 }
 
-export default Settings; 
+export default Settings;

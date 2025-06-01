@@ -3,7 +3,6 @@ import Logo from "../assets/Logo.png";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import EstadisticasEntrevistador from "../components/EstadisticasEntrevistador";
 import { useTheme } from "../context/themeContext";
 import { t } from "../i18n";
 
@@ -41,34 +40,19 @@ function NavbarTeacher() {
     }
   }, [user]);
 
-  useEffect(() => {
-    const fetchEstadisticas = async () => {
-      try {
-        const response = await getInterviewByTeacherRequest(user.id);
-        setEstadisticas(response.data);
-        console.log("Datos de entrevistas:", response.data);
-      } catch (error) {
-        setEstadisticas([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchEstadisticas();
-  }, [user.id]);
-
   return (
     <>
       <nav className="flex justify-center items-center w-full px-6 mx-auto rounded-lg bg-gradient-to-r from-[#283e56] to-[#4fc3f7] border-2 border-[#ffd700]">
         <div className="flex justify-between items-center w-full mx-auto p-2">
           <p className="text-xl font-bold text-gray-900 mr-5 hidden lg:block md:text-base">
-            {t('welcome_teacher', language)}
+            {t("welcome_teacher", language)}
           </p>
           <Menu as="nav" className="relative z-10">
             {({ open }) => (
               <>
                 <div className="flex items-center justify-between">
                   <MenuButton
-                    className={`flex h-10 items-center rounded-3xl animate-jump-in bg-white text-gray-900`}
+                    className={`flex h-10 items-center rounded-3xl animate-jump-in bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600  shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white`}
                   >
                     <img
                       className={`w-14 h-14 rounded-full p-1 md:block text-sm md:text-base font-bold text-gray-900 `}
@@ -76,7 +60,7 @@ function NavbarTeacher() {
                       alt="Profile"
                     />
                     <span
-                      className={`sm:text-xl md:text-sm font-bold hidden md:block mr-1 text-gray-900`}
+                      className={`sm:text-xl md:text-sm font-bold hidden md:block mr-1 `}
                     >
                       {user.userName}
                     </span>
@@ -86,7 +70,7 @@ function NavbarTeacher() {
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="currentColor"
-                      className={`w-4 h-4 m-2 transition duration-300 ease-in-out ml-1 text-black font-bold ${
+                      className={`w-4 h-4 m-2 transition duration-300 ease-in-out ml-1  font-bold ${
                         open === true &&
                         "transform rotate-180 transition duration-300 ease-in-out"
                       }`}
@@ -100,18 +84,18 @@ function NavbarTeacher() {
                   </MenuButton>
                 </div>
                 <MenuItems
-                  className="absolute p-1 top-20 right-0 w-52 rounded-md translate-y-5 border-2 shadow-sm md:text-sm animate-jump-in z-50
-                bg-white text-gray-900 border-gray-400"
+                  className="absolute p-1 top-20 right-0 w-52  translate-y-5  md:text-sm animate-jump-in z-50
+                bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                 >
-                  <MenuItem className="hover:bg-gradient-to-t from-purple-500  to-purple-400 rounded-lg ease-in-out m-1">
+                  <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                     {(active) => (
                       <Link
                         to={"/profile"}
                         className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                          active && "bg-white hover:text-white  font-bold"
+                          active && "bg-white   font-bold"
                         }`}
                       >
-                        {t('profile', language)}
+                        {t("profile", language)}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -129,15 +113,15 @@ function NavbarTeacher() {
                       </Link>
                     )}
                   </MenuItem>
-                  <MenuItem className="hover:bg-gradient-to-t from-emerald-500  to-emerald-400 rounded-lg ease-in-out m-1">
+                  <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                     {(active) => (
                       <Link
                         className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                          active && "bg-white hover:text-white font-bold"
+                          active && "bg-white  font-bold"
                         }`}
                         to={"/settings"}
                       >
-                        {t('settings', language)}
+                        {t("settings", language)}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -160,15 +144,15 @@ function NavbarTeacher() {
                       </Link>
                     )}
                   </MenuItem>
-                  <MenuItem className="hover:bg-gradient-to-t from-red-500  to-red-400 rounded-lg ease-in-out m-1">
+                  <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                     {(active) => (
                       <Link
                         className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                          active && "bg-white hover:text-white font-bold"
+                          active && "bg-white  font-bold"
                         }`}
                         onClick={handleSignOut}
                       >
-                        {t('signoff', language)}
+                        {t("signoff", language)}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -181,32 +165,6 @@ function NavbarTeacher() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
-                          />
-                        </svg>
-                      </Link>
-                    )}
-                  </MenuItem>
-                  <MenuItem className="hover:bg-gradient-to-t from-blue-500  to-blue-400 rounded-lg ease-in-out m-1">
-                    {(active) => (
-                      <Link
-                        className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                          active && "bg-white hover:text-white font-bold"
-                        }`}
-                        to="/stats"
-                      >
-                        {t('view_stats', language)}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-6 h-6 m-1 ml-2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                           />
                         </svg>
                       </Link>

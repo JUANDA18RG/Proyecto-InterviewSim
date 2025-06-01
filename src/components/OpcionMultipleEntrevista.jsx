@@ -30,8 +30,8 @@ function ProblemaOpcionMultiple({
 
   // Mapeo para traducir tipo de entrevista
   const tipoEntrevistaMap = {
-    opcionMultiple: t('option_multiple', language),
-    programacion: t('programming', language),
+    opcionMultiple: t("option_multiple", language),
+    programacion: t("programming", language),
   };
 
   const handleRadioChange = (questionIndex, option) => {
@@ -43,7 +43,7 @@ function ProblemaOpcionMultiple({
   };
 
   const handleSubmit = async () => {
-    setLoading(true); // Activar estado de carga
+    setLoading(true);
     try {
       const response = await calificarInterviewRequest({
         respuestaIA: questions.map((q) => q.answer),
@@ -52,6 +52,7 @@ function ProblemaOpcionMultiple({
         nombreEntrevista,
         dificultad,
         tipoEntrevista,
+        email: user.email,
       });
       const recomendacionesResponse = await obtenerRecomendacionesRequest({
         preguntas: questions.map((q) => q.question),
@@ -67,12 +68,12 @@ function ProblemaOpcionMultiple({
       // Actualiza el estado con las recomendaciones
       setResultado(response.data);
       setRecomendaciones(recomendacionesResponse.data);
-      toast.success(t('answers_sent_success', language));
+      toast.success(t("answers_sent_success", language));
       setRespuestaUser([]);
       setKey((prevKey) => prevKey + 1);
     } catch (error) {
       console.error("Error al enviar las respuestas:", error);
-      toast.error(t('answers_sent_error', language));
+      toast.error(t("answers_sent_error", language));
     } finally {
       setLoading(false); // Desactivar estado de carga
     }
@@ -119,28 +120,20 @@ function ProblemaOpcionMultiple({
   };
 
   return (
-    <div className="min-h-screen w-full p-5 bg-[#cbe2fe] dark:bg-gray-900 text-gray-900 dark:text-gray-200">
-      <div className="flex h-full w-full overflow-hidden space-x-5">
+    <div className="h-full w-full  bg-[#cbe2fe] dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+      <div className="flex h-full w-full  space-x-5">
         <div className="flex w-1/2 bg-gradient-to-br from-[#283e56] to-[#4fc3f7] rounded-xl border-2 border-[#ffd700] shadow-lg">
           <div className="flex flex-col w-full h-full p-5 overflow-y-auto ">
             <div className="flex flex-col bg-white bg-opacity-90 rounded-xl p-6 space-y-6 justify-center items-center border-2 border-[#ffd700] shadow-lg">
-              <div className="text-center mb-4">
-                <h2 className="text-2xl font-extrabold text-gray-900">
-                  {t('interview_title', language)}
-                </h2>
-                <p className="text-gray-500">
-                  {t('interview_description', language)}
-                </p>
-              </div>
               <div
                 key={key}
-                className="flex flex-col items-center justify-center w-full space-y-8"
+                className="flex flex-col items-center justify-center w-full space-y-4"
               >
                 {questions.length > 0 ? (
                   questions.map((question, index) => (
                     <div
                       key={index}
-                      className="w-full border-4 bg-transparent p-6 rounded-lg  space-y-4 mx-auto"
+                      className="w-full border-4 bg-transparent py-2 rounded-lg mx-auto "
                     >
                       <h3 className="text-xl font-bold text-gray-800">
                         {index + 1}. {question.question}
@@ -149,7 +142,7 @@ function ProblemaOpcionMultiple({
                       {question.options && (
                         <div
                           role="radiogroup"
-                          className="flex flex-col space-y-4 mt-5 justify-center items-center"
+                          className="flex flex-col space-y-4  justify-center items-center p-2"
                         >
                           {question.options.map((option, optIndex) => (
                             <div
@@ -162,7 +155,9 @@ function ProblemaOpcionMultiple({
                                 name={`question-${index}`}
                                 value={option}
                                 className="hidden peer"
-                                onChange={() => handleRadioChange(index, option)}
+                                onChange={() =>
+                                  handleRadioChange(index, option)
+                                }
                               />
                               <label
                                 htmlFor={`question-${index}-option-${optIndex}`}
@@ -177,34 +172,43 @@ function ProblemaOpcionMultiple({
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-700">{t('no_questions_available', language)}</p>
+                  <p className="text-gray-700">
+                    {t("no_questions_available", language)}
+                  </p>
                 )}
               </div>
-              <div className="text-gray-700 mt-2">
-                <span className="font-bold">{t('company', language)}:</span> {nombreEntrevista}
+              <div className="text-gray-700">
+                <span className="font-bold">{t("company", language)}:</span>{" "}
+                {nombreEntrevista}
               </div>
-              <div className="text-gray-700 mt-2">
-                <span className="font-bold">{t('interview_type', language)}:</span> {tipoEntrevistaMap[tipoEntrevista] || tipoEntrevista}
+              <div className="text-gray-700 ">
+                <span className="font-bold">
+                  {t("interview_type", language)}:
+                </span>{" "}
+                {tipoEntrevistaMap[tipoEntrevista] || tipoEntrevista}
               </div>
-              <div className="text-gray-700 mt-2">
-                <span className="font-bold">{t('difficulty', language)}:</span> {dificultad}
+              <div className="text-gray-700 ">
+                <span className="font-bold">{t("difficulty", language)}:</span>{" "}
+                {dificultad}
               </div>
               {!resultado && (
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className={`mt-4 text-white px-4 py-2 rounded-lg ${
+                  className={` text-white px-4 py-2 rounded-lg ${
                     loading
                       ? " cursor-not-allowed"
                       : "bg-indigo-500 hover:bg-indigo-600"
                   }`}
                 >
-                  {loading ? t('sending', language) : t('send_answers', language)}
+                  {loading
+                    ? t("sending", language)
+                    : t("send_answers", language)}
                 </button>
               )}
 
               {resultado && (
-                <div className="flex items-center justify-between mt-4 text-center w-full">
+                <div className="flex items-center justify-between  text-center w-full">
                   <div className="flex space-x-4">
                     <button
                       onClick={handleHacerOtraEntrevista}
@@ -224,7 +228,9 @@ function ProblemaOpcionMultiple({
                           d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
                         />
                       </svg>
-                      <span className="ml-2">{t('do_another_interview', language)}</span>
+                      <span className="ml-2">
+                        {t("do_another_interview", language)}
+                      </span>
                     </button>
                     <button
                       onClick={handleRepetirEntrevista}
@@ -244,11 +250,14 @@ function ProblemaOpcionMultiple({
                           d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
                         />
                       </svg>
-                      <span className="ml-2">{t('repeat_interview', language)}</span>
+                      <span className="ml-2">
+                        {t("repeat_interview", language)}
+                      </span>
                     </button>
                   </div>
                   <p className="text-xl font-bold text-white bg-blue-500 p-3 rounded-lg shadow-lg">
-                    {t('responses', language)}: {resultado.score} / {resultado.total}
+                    {t("responses", language)}: {resultado.score} /{" "}
+                    {resultado.total}
                   </p>
                 </div>
               )}
@@ -261,18 +270,23 @@ function ProblemaOpcionMultiple({
               onClick={() => setShowGif(!showGif)}
               className="absolute top-3 right-3 z-10 px-3 py-1 bg-white bg-opacity-80 rounded shadow text-sm font-semibold hover:bg-opacity-100 transition"
             >
-              {showGif ? 'Ocultar GIF' : 'Mostrar GIF'}
+              {showGif ? "Ocultar GIF" : "Mostrar GIF"}
             </button>
             {showGif && (
-              <img src={gifUrl} alt="GIF" className="h-full w-full rounded-lg" />
+              <img
+                src={gifUrl}
+                alt="GIF"
+                className="h-full w-full rounded-lg"
+              />
             )}
             <div className="absolute bottom-0 right-0 bg-gray-400 bg-opacity-70 m-3 rounded-full shadow-lg">
               <p className="p-4 text-white text-2xl font-bold">
-                {t('welcome', language)} {t('interview_title', language)}, {t('good_luck', language)}
+                {t("welcome", language)} {nombreEntrevista}{" "}
+                <span className="gap-2">{t("good_luck", language)}</span>
               </p>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-[#283e56] to-[#4fc3f7] rounded-xl border-2 border-[#ffd700] shadow-lg h-1/2">
+          <div className="bg-gradient-to-br from-[#283e56] to-[#4fc3f7] rounded-xl border-2 border-[#ffd700] shadow-lg h-1/2 overflow-y-auto">
             <RecomendacionesIA recomendaciones={recomendaciones} />
           </div>
         </div>

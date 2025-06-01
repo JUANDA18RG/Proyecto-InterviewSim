@@ -27,11 +27,11 @@ function CreateInterview() {
       const data = { ...values, userId, tipoEntrevista };
       console.log("Datos enviados:", data);
       await createInterviewRequest(data);
-      toast.success(t('interview_created_success', language));
+      toast.success(t("interview_created_success", language));
       reset();
     } catch (error) {
       console.log(error);
-      toast.error(t('interview_created_error', language));
+      toast.error(t("interview_created_error", language));
       setError("apiError", {
         type: "manual",
         message: error.response?.data || error.message,
@@ -58,7 +58,7 @@ function CreateInterview() {
           <div className="flex flex-col space-y-8 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-xl">
             <h1 className="flex items-center justify-center">
               <span className="text-2xl font-bold text-black dark:text-white">
-                {t('create_interview', language)}
+                {t("create_interview", language)}
               </span>
             </h1>
             <div className="flex flex-col">
@@ -66,20 +66,24 @@ function CreateInterview() {
                 htmlFor="title"
                 className="text-md font-medium text-black dark:text-white mb-1"
               >
-                {t('interview_title', language)}
+                {t("interview_title", language)}
               </label>
               <input
                 type="text"
                 name="title"
                 id="title"
                 className="w-full px-4 py-3 text-sm font-semibold bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-center text-[#283e56] dark:text-white"
-                {...register("title", { required: t('interview_title_required', language) })}
-                placeholder={t('interview_title', language)}
-                aria-label={t('interview_title', language)}
+                {...register("title", {
+                  required: t("interview_title_required", language),
+                })}
+                placeholder={t("interview_title", language)}
+                aria-label={t("interview_title", language)}
                 onChange={() => clearErrors("title")}
               />
               {errors.title && (
-                <span className="text-red-500 text-xs">{errors.title.message}</span>
+                <span className="text-red-500 text-xs">
+                  {errors.title.message}
+                </span>
               )}
             </div>
             <div className="flex flex-col">
@@ -87,20 +91,22 @@ function CreateInterview() {
                 htmlFor="description"
                 className="text-md font-medium text-black dark:text-white mb-1"
               >
-                {t('interview_description', language)}
+                {t("interview_description", language)}
               </label>
               <textarea
                 name="description"
                 id="description"
                 className="w-full text-center p-2 text-sm font-semibold bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white resize-none"
                 {...register("description", {
-                  required: t('interview_description_required', language),
+                  required: t("interview_description_required", language),
                 })}
-                placeholder={t('interview_description', language)}
+                placeholder={t("interview_description", language)}
                 onChange={() => clearErrors("description")}
               />
               {errors.description && (
-                <span className="text-red-500 text-xs">{errors.description.message}</span>
+                <span className="text-red-500 text-xs">
+                  {errors.description.message}
+                </span>
               )}
             </div>
             <div className="flex flex-col">
@@ -108,7 +114,7 @@ function CreateInterview() {
                 htmlFor="empresa"
                 className="text-md font-medium text-black dark:text-white mb-1"
               >
-                {t('company', language)}
+                {t("company", language)}
               </label>
               <input
                 type="text"
@@ -116,13 +122,15 @@ function CreateInterview() {
                 id="empresa"
                 className="w-full text-center px-3 py-2 text-sm font-semibold bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                 {...register("empresa", {
-                  required: t('company_required', language),
+                  required: t("company_required", language),
                 })}
-                placeholder={t('company', language)}
+                placeholder={t("company", language)}
                 onChange={() => clearErrors("empresa")}
               />
               {errors.empresa && (
-                <span className="text-red-500 text-xs">{errors.empresa.message}</span>
+                <span className="text-red-500 text-xs">
+                  {errors.empresa.message}
+                </span>
               )}
             </div>
             <div className="flex flex-col">
@@ -130,18 +138,18 @@ function CreateInterview() {
                 htmlFor="Dificultad"
                 className="text-md font-medium text-black dark:text-white mb-1"
               >
-                {t('difficulty', language)}
+                {t("difficulty", language)}
               </label>
               <select
                 name="Dificultad"
                 id="Dificultad"
-                className="w-full text-start px-3 py-2 text-sm font-semibold bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-start px-3 py-2 text-sm font-semibold bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                 {...register("Dificultad", {
-                  required: t('difficulty_required', language),
+                  required: t("difficulty_required", language),
                 })}
                 onChange={() => clearErrors("Dificultad")}
               >
-                <option value="">{t('select_difficulty', language)}</option>
+                <option value="">{t("select_difficulty", language)}</option>
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -150,7 +158,9 @@ function CreateInterview() {
                 <option value="5">5</option>
               </select>
               {errors.Dificultad && (
-                <span className="text-red-500 text-xs">{errors.Dificultad.message}</span>
+                <span className="text-red-500 text-xs">
+                  {errors.Dificultad.message}
+                </span>
               )}
             </div>
             <div className="flex flex-col mb-6">
@@ -158,14 +168,14 @@ function CreateInterview() {
                 htmlFor="tipoEntrevista"
                 className="text-md font-medium text-black dark:text-white mb-1"
               >
-                {t('interview_type', language)}
+                {t("interview_type", language)}
               </label>
               <div className="flex justify-between space-x-4">
                 <div
                   className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors duration-300 justify-center ${
                     tipoEntrevista === "opcionMultiple"
                       ? "border-green-500 bg-emerald-500 text-white"
-                      : "border-gray-300 bg-white hover:bg-emerald-200"
+                      : "dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                   } w-1/2 h-12`}
                   onClick={() => setTipoEntrevista("opcionMultiple")}
                 >
@@ -191,13 +201,15 @@ function CreateInterview() {
                       d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
                     />
                   </svg>
-                  <span className="text-md font-medium">{t('option_multiple', language)}</span>
+                  <span className="text-md font-medium">
+                    {t("option_multiple", language)}
+                  </span>
                 </div>
                 <div
                   className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors duration-300 justify-center ${
                     tipoEntrevista === "programacion"
                       ? "border-green-500 bg-emerald-500 text-white"
-                      : "border-gray-300 bg-white hover:bg-emerald-200"
+                      : "dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                   } w-1/2 h-12`}
                   onClick={() => setTipoEntrevista("programacion")}
                 >
@@ -223,13 +235,17 @@ function CreateInterview() {
                       d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
                     />
                   </svg>
-                  <span className="text-md font-medium">{t('programming', language)}</span>
+                  <span className="text-md font-medium">
+                    {t("programming", language)}
+                  </span>
                 </div>
               </div>
             </div>
 
             {errors.apiError && (
-              <span className="text-red-500 text-xs block text-center mb-2">{errors.apiError.message}</span>
+              <span className="text-red-500 text-xs block text-center mb-2">
+                {errors.apiError.message}
+              </span>
             )}
 
             <div className="flex justify-center items-center">
@@ -238,7 +254,7 @@ function CreateInterview() {
                 className="px-4 py-2 w-48  h-10 text-md font-semibold text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 disabled={loading}
               >
-                {loading ? t('creating', language) : t('create', language)}
+                {loading ? t("creating", language) : t("create", language)}
               </button>
             </div>
           </div>

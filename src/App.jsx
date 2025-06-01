@@ -14,6 +14,8 @@ import { useState, useEffect } from "react";
 import Profile from "./components/ProfileUser/Profile";
 import Settings from "./components/Settings/Settings";
 import EditProfilePage from "./pages/EditProfilePage";
+import RecoveryPassword from "./pages/recoveryPassword";
+import ResetPassword from "./pages/resertPassword";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -22,10 +24,6 @@ function App() {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 3000);
-
-    // Borra el token cada vez que se monta la app (recarga)
-    localStorage.removeItem("token");
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     return () => clearTimeout(timer);
   }, []);
@@ -43,6 +41,11 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/recovery-password" element={<RecoveryPassword />} />
+              <Route
+                path="/reset-password/:token"
+                element={<ResetPassword />}
+              />
               <Route element={<ProtectedRoute />}>
                 <Route path="/interview/:id" element={<AreaInterview />} />
                 <Route path="/student" element={<AreaStudent />} />

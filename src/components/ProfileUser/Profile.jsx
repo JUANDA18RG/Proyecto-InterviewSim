@@ -73,6 +73,7 @@ function Profile() {
   };
 
   const handleEditProfile = () => setShowEditModal(true);
+
   const handleCloseModal = () => {
     setShowEditModal(false);
     setNewPhoto(null);
@@ -86,18 +87,18 @@ function Profile() {
       setNewPhoto(file);
       setPreviewPhoto(URL.createObjectURL(file));
     } else {
-      toast.error(t('photo_invalid', language));
+      toast.error(t("photo_invalid", language));
     }
   };
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     if (!newName) {
-      toast.error(t('name_required', language));
+      toast.error(t("name_required", language));
       return;
     }
     if (newPassword && newPassword !== confirmPassword) {
-      toast.error(t('passwords_no_match', language));
+      toast.error(t("passwords_no_match", language));
       return;
     }
     setLoadingEdit(true);
@@ -109,11 +110,11 @@ function Profile() {
     if (newPhoto) formData.append("photo", newPhoto);
     try {
       await updateProfileRequest(formData);
-      toast.success(t('profile_update_success', language));
+      toast.success(t("profile_update_success", language));
       setShowEditModal(false);
       window.location.reload();
     } catch (err) {
-      toast.error(t('profile_update_error', language));
+      toast.error(t("profile_update_error", language));
     } finally {
       setLoadingEdit(false);
     }
@@ -121,7 +122,6 @@ function Profile() {
 
   return (
     <div className="h-screen w-full p-5 overflow-auto bg-[#cde5ff] dark:bg-gray-900">
-
       <div className="flex flex-col items-start h-full">
         <div className="w-full flex justify-between items-center rounded-lg space-x-6 mx-auto">
           <button
@@ -156,7 +156,7 @@ function Profile() {
             </div>
             <div className="flex items-center justify-center">
               <p className="text-xl font-bold text-gray-900 mr-5 hidden lg:block md:text-base">
-                {t('welcome', language)} {t('profile', language)} 👋❤️!
+                {t("welcome", language)} {t("profile", language)} 👋❤️!
               </p>
               <div className="flex h-10 items-center rounded-3xl animate-jump-in bg-white text-gray-900 p-2">
                 <img
