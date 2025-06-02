@@ -123,6 +123,10 @@ const translations = {
     nothing_recomended_exiting: "Aún no hay recomendaciones disponibles",
     compiled: "Compilado...",
     compiled_and_Executed: "Compilado y ejecutado",
+    filter_interviews: "Filtrar Entrevistas",
+    apply_filters: "Aplicar Filtros",
+    filter_by_programming: "Filtrar por programación",
+    filter_by_difficulty: "Filtrar por dificultad",
   },
   en: {
     config: "Settings",
@@ -248,7 +252,10 @@ const translations = {
     nothing_recomended_exiting: "No recommendations available yet",
     compiled: "Compiled...",
     compiled_and_Executed: "Compiled and executed",
-
+    filter_interviews: "Filter Interviews",
+    apply_filters: "Apply Filters",
+    filter_by_programming: "Filter by programming",
+    filter_by_difficulty: "Filter by difficulty",
   },
 };
 

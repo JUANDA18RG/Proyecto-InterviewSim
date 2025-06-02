@@ -1,7 +1,10 @@
 import {instanceInterview} from './axios.js';
 
 //traer todas las entrevistas
-export const getInterviewsRequest = async ()=> instanceInterview.get(`/allIterview`);
+export const getInterviewsRequest = async (filters = {}) => {
+  const queryParams = new URLSearchParams(filters).toString();
+  return instanceInterview.get(`/interviews?${queryParams}`);
+};
 export const getInterviewByIdRequest = async (id) => instanceInterview.get(`/interview/${id}`);
 export const createInterviewRequest = async (data) => instanceInterview.post(`/createInterview`, data);
 export const getInterviewByTeacherRequest = async (id) => instanceInterview.get(`/interviewTeacher/${id}`);

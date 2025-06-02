@@ -4,28 +4,30 @@ import { Link } from "react-router-dom";
 import Spinner from "./spinner";
 import { useTheme } from "../context/themeContext";
 import { t } from "../i18n";
+import FiltersInterview from "./FiltersInterview";
 
 function PanelInterviews() {
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const { language } = useTheme();
 
-  useEffect(() => {
-    const fetchInterviews = async () => {
-      try {
-        const response = await getInterviewsRequest();
-        setInterviews(response.data);
-      } catch (error) {
-        console.error(
-          "Error al traer las entrevistas:",
-          error.response ? error.response.data : error.message
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchInterviews = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const response = await getInterviewsRequest(filters);
+      setInterviews(response.data);
+    } catch (error) {
+      console.error(
+        "Error al traer las entrevistas:",
+        error.response ? error.response.data : error.message
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchInterviews();
+  useEffect(() => {
+    fetchInterviews(); // Carga inicial sin filtros
   }, []);
 
   if (loading) {
@@ -38,23 +40,21 @@ function PanelInterviews() {
 
   return (
     <div className="flex h-full w-full bg-gradient-to-r from-[#283e56] to-[#4fc3f7] rounded-lg overflow-hidden">
-      <div
-        className="flex flex-col w-full h-full p-5 space-y-5 overflow-y-auto panel-interviews-scroll"
-        key={interviews.title}
-      >
+      <div className="flex flex-col w-full h-full p-5 space-y-5 overflow-y-auto panel-interviews-scroll">
+        <FiltersInterview fetchInterviews={fetchInterviews} />
         {interviews.map((interview) => (
           <div
-            key={interview.id}
-            className="flex flex-col bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600  shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white p-3 rounded-lg space-y-3"
+            key={interview._id}
+            className="flex flex-col bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white p-3 rounded-lg space-y-3"
           >
             <h2 className="text-lg font-bold">{interview.title}</h2>
             <p>{interview.description}</p>
             <div className="space-y-2">
               <p className="text-gray-700">
-                {t("company", language)}:{interview.empresa}
+                {t("company", language)}: {interview.empresa}
               </p>
               <p className="text-gray-700">
-                {t("interview_type", language)} {interview.tipoEntrevista}
+                {t("interview_type", language)}: {interview.tipoEntrevista}
               </p>
             </div>
             <div className="flex w-full justify-between items-center">
