@@ -12,3 +12,5 @@ Currently, two official plugins are available:
 correo: interviewsim2025@gmail.com
 
 contraseña : 123456789interviewsim2025
+
+contraseña ApiRappid : 123456789Interviewsim2025@

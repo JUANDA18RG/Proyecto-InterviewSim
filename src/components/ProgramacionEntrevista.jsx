@@ -31,7 +31,7 @@ const BottomCompilar = ({
   // Definir las constantes reutilizables
   const RAPID_API_URL = "https://judge0-ce.p.rapidapi.com/submissions";
   const RAPID_API_HOST = "judge0-ce.p.rapidapi.com";
-  const RAPID_API_KEY = "9dd58574b7msh667bbe109a2a380p1ffdbfjsn7be279fb6108";
+  const RAPID_API_KEY = "17c467b0d1msh0080552d2fa86bfp10e7f1jsn42775aa94480";
 
   const onChange = (action, data) => {
     if (action === "code") {
@@ -43,18 +43,20 @@ const BottomCompilar = ({
     setProcessing(true);
     const formData = {
       language_id: selectedLanguage.id,
-      // codifica el código fuente en base64
       source_code: btoa(code),
     };
     const options = {
       method: "POST",
       url: RAPID_API_URL,
-      params: { base64_encoded: "true", fields: "*" },
+      params: {
+        base64_encoded: "true",
+        wait: "false",
+        fields: "*",
+      },
       headers: {
-        "content-type": "application/json",
+        "x-rapidapi-key": RAPID_API_KEY,
+        "x-rapidapi-host": RAPID_API_HOST,
         "Content-Type": "application/json",
-        "X-RapidAPI-Host": RAPID_API_HOST,
-        "X-RapidAPI-Key": RAPID_API_KEY,
       },
       data: formData,
     };
@@ -77,14 +79,19 @@ const BottomCompilar = ({
     const options = {
       method: "GET",
       url: `${RAPID_API_URL}/${token}`,
+      params: {
+        base64_encoded: "true",
+        fields: "*",
+      },
       headers: {
-        "X-RapidAPI-Host": RAPID_API_HOST,
-        "X-RapidAPI-Key": RAPID_API_KEY,
+        "x-rapidapi-key": RAPID_API_KEY,
+        "x-rapidapi-host": RAPID_API_HOST,
       },
     };
 
     try {
       let response = await axios.request(options);
+      console.log("Estado de la respuesta:", response.data);
       let statusId = response.data.status?.id;
 
       if (statusId === 1 || statusId === 2) {
@@ -95,7 +102,7 @@ const BottomCompilar = ({
       } else {
         setProcessing(false);
         setOutputDetails(response.data);
-        fetchRecommendations(); // Llamar a la función para obtener recomendaciones.
+        fetchRecommendations();
       }
     } catch (err) {
       console.error("Error al consultar el estado:", err);
@@ -105,7 +112,7 @@ const BottomCompilar = ({
 
   const fetchRecommendations = async () => {
     try {
-      const respuestaUser = code; // Código fuente del usuario
+      const respuestaUser = code;
       console.log("respuestaUser (código fuente):", respuestaUser);
 
       const pregunta = questions.map((q) => q.question).join(", ");
