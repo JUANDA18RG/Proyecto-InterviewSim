@@ -3,11 +3,14 @@ import Logo from "../assets/Logo.png";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useTheme } from "../context/themeContext";
+import { t } from "../i18n";
 
 function Navbar() {
   const { user, signout } = useAuth();
   console.log("datos del usuario", user);
   const navigate = useNavigate();
+  const { language } = useTheme();
 
   const handleSignOut = async () => {
     try {
@@ -39,7 +42,7 @@ function Navbar() {
 
   return (
     <>
-      <header className="flex items-center justify-center top-0 bg-gradient-to-l from-rose-300 via-purple-300 to-lime-300 shadow-md h-20 w-full md:px-6 rounded-lg">
+      <header className="flex items-center justify-center top-0 bg-gradient-to-r from-[#283e56] to-[#4fc3f7] shadow-md h-20 w-full md:px-6 rounded-lg border-b-4 border-[#ffd700]">
         <nav className="flex justify-between items-center w-full  px-6 mx-auto">
           <div className="p-1 flex items-center justify-center cursor-pointer">
             <img
@@ -57,19 +60,19 @@ function Navbar() {
                 <>
                   <div className="flex items-center justify-center">
                     <p className="text-xl font-bold text-gray-900 mr-5 hidden lg:block md:text-base">
-                      ¡Bienvenido de nuevo a tu inicio Estudiante 👋❤️!
+                      {t("welcome_student", language)}
                     </p>
 
                     <MenuButton
-                      className={`flex h-10 items-center rounded-3xl animate-jump-in bg-white text-gray-900`}
+                      className={`flex h-10 items-center rounded-3xl animate-jump-in bg-white dark:bg-gray-800 border border-[#ffd700]  dark:border-yellow-600  shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white`}
                     >
                       <img
-                        className={`w-14 h-14 rounded-full p-1 md:block text-sm md:text-base font-bold text-gray-900 `}
+                        className={`w-14 h-14 rounded-full p-1 md:block text-sm md:text-base font-bold  `}
                         src={profileImage}
                         alt="Profile"
                       />
                       <span
-                        className={`sm:text-xl md:text-sm font-bold hidden md:block mr-1 text-gray-900`}
+                        className={`sm:text-xl md:text-sm font-bold hidden md:block mr-1 `}
                       >
                         {user.userName}
                       </span>
@@ -93,18 +96,19 @@ function Navbar() {
                     </MenuButton>
                   </div>
                   <MenuItems
-                    className="absolute p-1 top-20 right-0 w-52 rounded-md translate-y-5 border-2 shadow-sm md:text-sm animate-jump-in z-50
-                        bg-white text-gray-900 border-gray-400"
+                    className="absolute p-1 top-20 right-0 w-52  translate-y-5  md:text-sm animate-jump-in z-50
+                  bg-white
+                        dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white"
                   >
-                    <MenuItem className="hover:bg-gradient-to-t from-purple-500  to-purple-400 rounded-lg ease-in-out m-1 border-2 border-white">
+                    <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                       {(active) => (
                         <Link
                           to={"/profile"}
                           className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                            active && "bg-white hover:text-white  font-bold"
+                            active && "bg-white   font-bold"
                           }`}
                         >
-                          Profile
+                          {t("profile", language)}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -122,15 +126,15 @@ function Navbar() {
                         </Link>
                       )}
                     </MenuItem>
-                    <MenuItem className="hover:bg-gradient-to-t from-emerald-500  to-emerald-400 rounded-lg ease-in-out m-1 border-2 border-white">
+                    <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                       {(active) => (
                         <Link
                           className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                            active && "bg-white hover:text-white font-bold"
+                            active && "bg-white  font-bold"
                           }`}
-                          href="/"
+                          to={"/settings"}
                         >
-                          Settings
+                          {t("settings", language)}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -153,15 +157,15 @@ function Navbar() {
                         </Link>
                       )}
                     </MenuItem>
-                    <MenuItem className="hover:bg-gradient-to-t from-red-500  to-red-400 rounded-lg ease-in-out m-1 border-2 border-white">
+                    <MenuItem className="flex justify-between items-center hover:bg-gray-200 dark:hover:bg-gray-700">
                       {(active) => (
                         <Link
                           className={`h-10 flex items-center justify-between px-2 text-sm rounded-md${
-                            active && "bg-white hover:text-white font-bold"
+                            active && "bg-white  font-bold"
                           }`}
                           onClick={handleSignOut}
                         >
-                          Sign-off
+                          {t("signoff", language)}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

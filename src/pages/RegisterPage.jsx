@@ -2,69 +2,93 @@ import { useForm } from "react-hook-form";
 import Logo from "../assets/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Student from "../assets/Student.png";
 import Teacher from "../assets/Teacher.png";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTheme } from "../context/themeContext";
+import { t } from "../i18n";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [role, setRole] = useState(null);
-  const { signup, isAuthenticated } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (role === "student") {
-        navigate("/student");
-      } else if (role === "teacher") {
-        navigate("/teacher");
-      }
-    }
-  }, [isAuthenticated, navigate, role]);
+  const [roleError, setRoleError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { language } = useTheme();
 
   const onSubmit = handleSubmit(async (values) => {
     if (!role) {
-      toast.warning("Por favor, selecciona tu rol.");
+      setRoleError(t("role_required", language));
       return;
+    } else {
+      setRoleError("");
     }
+    setLoading(true);
     try {
-      await signup({ ...values, role });
-      console.log("Registro exitoso");
-      console.log("Role seleccionado: ", role); // Verificar el valor de role
+      const response = await signup({ ...values, role });
+      console.log("Registration response:", response);
+      if (response.error === false) {
+        toast.success(t("registration_success", language));
+        navigate("/login", { replace: true });
+      }
     } catch (error) {
-      toast.error(
-        "Error durante el registro: " + (error.response?.data || error.message)
-      );
-      console.error("Error durante el registro: ", error);
+      console.error("Error during registration:", error);
+      setError("apiError", {
+        type: "manual",
+        message: t("registration_error", language),
+      });
+      setRoleError(t("role_required", language));
+    } finally {
+      setLoading(false);
     }
   });
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-green-500 via-blue-500 to-pink-500">
-      <div className="w-full max-w-md p-8 bg-white bg-opacity-90 rounded-2xl shadow-2xl backdrop-blur-md border-4 border-gray-300">
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-[#283e56] via-[#4fc3f7] to-[#283e56]">
+      <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white">
         <div className="flex flex-col items-center mb-8">
           <Link to={"/"}>
             <img
               src={Logo}
               alt="Logo"
-              className="w-24 h-24 mb-4 animate-jump-in"
+              className="w-24 h-24 mb-4 animate-jump-in border-2 border-[#ffd700] bg-white rounded-full shadow-md"
             />
           </Link>
-          <h1 className="text-3xl font-extrabold text-gray-800 text-center">
-            Register InterviewSim
+          <h1 className="text-3xl font-extrabold text-center text-[#283e56] dark:text-white">
+            {t("register_title", language)}
           </h1>
         </div>
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="relative mb-4">
+            <label htmlFor="userName" className="sr-only">
+              Usuario
+            </label>
             <input
+              id="userName"
               type="text"
-              {...register("userName", { required: "Username es requerido" })}
-              className="w-full px-4 py-3 text-sm font-semibold bg-white border border-gray-300 rounded-lg items-center justify-center shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center"
-              placeholder="Username"
+              {...register("userName", {
+                required: t("username_required", language),
+              })}
+              onChange={() => clearErrors("userName")}
+              className="w-full px-4 py-3 text-sm font-semibold bg-white border border-[#ffd700] rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-center text-[#283e56]"
+              placeholder={t("username", language)}
+              aria-label={t("username", language)}
             />
+            {errors.userName && (
+              <span className="text-red-500 text-xs absolute left-0 -bottom-5">
+                {errors.userName.message}
+              </span>
+            )}
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,12 +108,29 @@ export default function RegisterPage() {
           </div>
 
           <div className="relative mb-4">
+            <label htmlFor="email" className="sr-only">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
-              {...register("email", { required: "Email es requerido" })}
-              className="w-full px-4 py-3 text-sm font-semibold bg-white border border-gray-300 rounded-lg items-center justify-center shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center"
-              placeholder="Email"
+              {...register("email", {
+                required: t("email_required", language),
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: t("email_invalid", language),
+                },
+              })}
+              onChange={() => clearErrors("email")}
+              className="w-full px-4 py-3 text-sm font-semibold bg-white border border-[#ffd700] rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-center text-[#283e56]"
+              placeholder={t("email", language)}
+              aria-label={t("email", language)}
             />
+            {errors.email && (
+              <span className="text-red-500 text-xs absolute left-0 -bottom-5">
+                {errors.email.message}
+              </span>
+            )}
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,28 +150,26 @@ export default function RegisterPage() {
           </div>
 
           <div className="relative mb-4">
+            <label htmlFor="password" className="sr-only">
+              Contraseña
+            </label>
             <input
+              id="password"
               type={passwordVisible ? "text" : "password"}
-              {...register("password", { required: "Contraseña es requerida" })}
-              className="w-full px-4 py-3 text-sm font-semibold bg-white border border-gray-300 rounded-lg items-center justify-center shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center"
-              placeholder="Password"
+              {...register("password", {
+                required: t("password_required", language),
+                minLength: { value: 6, message: t("password_min", language) },
+              })}
+              onChange={() => clearErrors("password")}
+              className="w-full px-4 py-3 text-sm font-semibold bg-white border border-[#ffd700] rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-center text-[#283e56]"
+              placeholder={t("password", language)}
+              aria-label={t("password", language)}
             />
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-gray-400"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                />
-              </svg>
-            </div>
+            {errors.password && (
+              <span className="text-red-500 text-xs absolute left-0 -bottom-5">
+                {errors.password.message}
+              </span>
+            )}
             <div
               className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer z-20"
               onClick={() => setPasswordVisible(!passwordVisible)}
@@ -174,14 +213,17 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-around mb-6">
+          <div className="flex flex-wrap justify-around mb-2">
             <div
               className={`flex items-center space-x-2 p-2 border rounded-lg cursor-pointer ${
                 role === "student"
-                  ? "border-2 border-blue-500 bg-blue-200 "
-                  : "border-2 border-gray-300"
+                  ? "border-2 border-[#4fc3f7] bg-[#e3f7fd] text-[#283e56]"
+                  : "border-2 border-[#ffd700] text-black"
               }`}
-              onClick={() => setRole("student")}
+              onClick={() => {
+                setRole("student");
+                setRoleError("");
+              }}
             >
               <input
                 type="radio"
@@ -192,15 +234,20 @@ export default function RegisterPage() {
                 readOnly
               />
               <img src={Student} alt="Student" className="w-10 h-10" />
-              <span className="text-gray-700 font-semibold">Estudiante</span>
+              <span className="text-gray-700 font-semibold">
+                {t("student", language)}
+              </span>
             </div>
             <div
               className={`flex items-center space-x-2 p-2 border rounded-lg cursor-pointer ${
                 role === "teacher"
-                  ? "border-2 border-blue-500 bg-blue-200 "
-                  : "border-2 border-gray-300"
+                  ? "border-2 border-[#4fc3f7] bg-[#e3f7fd] text-[#283e56]"
+                  : "border-2 border-[#ffd700] text-black"
               }`}
-              onClick={() => setRole("teacher")}
+              onClick={() => {
+                setRole("teacher");
+                setRoleError("");
+              }}
             >
               <input
                 type="radio"
@@ -211,26 +258,39 @@ export default function RegisterPage() {
                 readOnly
               />
               <img src={Teacher} alt="Teacher" className="w-10 h-10" />
-              <span className="font-semibold">Profesor</span>
+              <span className="font-semibold">{t("teacher", language)}</span>
             </div>
           </div>
+          {roleError && (
+            <span className="text-red-500 text-xs block text-center mb-2">
+              {t("role_required", language)}
+            </span>
+          )}
+
+          {errors.apiError && (
+            <span className="text-red-500 text-xs block text-center mb-2">
+              {errors.apiError.message}
+            </span>
+          )}
 
           <button
             type="submit"
-            className="w-full px-4 py-3 text-sm font-semibold text-white bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-full px-4 py-3 text-sm font-bold text-[#ffd700] bg-[#283e56] rounded-lg shadow-md border-2 border-[#ffd700] hover:bg-[#ffd700] hover:text-[#283e56] transition duration-200"
+            disabled={loading}
+            style={{ boxShadow: "0 2px 8px #283e56aa" }}
           >
-            Register
+            {loading ? t("registering", language) : t("register", language)}
           </button>
         </form>
-        <p className="text-sm text-center text-gray-600 mt-6">
-          Already have an account?{" "}
+        <div className="text-center  dark:text-white text-black mt-4">
+          {t("already_have_account", language)}{" "}
           <Link
             to={"/login"}
-            className="text-blue-500 font-bold hover:underline ml-4"
+            className="text-[#4fc3f7] font-bold hover:text-[#ffd700] transition"
           >
-            Login
+            {t("login", language)}
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

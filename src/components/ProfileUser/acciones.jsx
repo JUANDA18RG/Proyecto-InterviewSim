@@ -1,10 +1,13 @@
 import { useAuth } from "../../context/authContext";
 import { useEffect, useState } from "react";
 import { getGradesRequest, getGradesTeacherRequest } from "../../api/auth";
+import { useTheme } from "../../context/themeContext";
+import { t } from "../../i18n";
 
 function Acciones() {
   const { user } = useAuth();
   const [acciones, setAcciones] = useState([]);
+  const { language } = useTheme();
 
   useEffect(() => {
     const traerAcciones = async () => {
@@ -47,12 +50,12 @@ function Acciones() {
   }, [user]);
 
   return (
-    <div className="h-full w-full p-5 bg-gradient-to-r from-orange-300 via-lime-300 to-emerald-300 rounded-lg overflow-hidden">
+    <div className="h-full w-full p-5 bg-gradient-to-r from-[#283e56] to-[#4fc3f7] border-2 border-yellow-400 rounded-lg overflow-hidden">
       <div className="flex flex-col w-full h-full p-5 space-y-5 overflow-y-auto">
         {acciones.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="bg-white shadow-md rounded-lg p-3 font-semibold text-center">
-              <p className="text-gray-700">No tienes acciones disponibles.</p>
+              <p className="text-gray-700">{t("nothin_accions", language)}</p>
             </div>
           </div>
         ) : (
@@ -65,6 +68,11 @@ function Acciones() {
             </div>
           ))
         )}
+      </div>
+      <div className="flex items-center justify-center mt-6 ">
+        <p className="text-sm text-gray-600">
+          {t("profile_info_text", language)}
+        </p>
       </div>
     </div>
   );

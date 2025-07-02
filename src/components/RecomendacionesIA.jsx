@@ -1,15 +1,18 @@
 import PropTypes from "prop-types";
+import { t } from "../i18n";
+import { useTheme } from "../context/themeContext";
 
 const RecomendacionesIA = ({ recomendaciones }) => {
   // Acceder a la estructura anidada correctamente
   const recomendacionesIA =
     recomendaciones?.recomendaciones?.recommendations || [];
+  const { language } = useTheme();
 
   console.log("RecomendacionesIA:", recomendacionesIA);
 
   if (recomendacionesIA.length === 0) {
     return (
-      <div className="flex  items-center justify-center h-full p-6  rounded-lg shadow-lg space-x-2">
+      <div className="flex  items-center justify-center h-full p-6  rounded-lg shadow-lg space-x-2 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -26,7 +29,7 @@ const RecomendacionesIA = ({ recomendaciones }) => {
         </svg>
 
         <p className="text-lg font-semibold text-gray-800">
-          No hay recomendaciones disponible todavía
+          {t("nothing_recomended", language)}
         </p>
       </div>
     );
@@ -37,7 +40,10 @@ const RecomendacionesIA = ({ recomendaciones }) => {
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Recomendaciones</h2>
       <ul className="space-y-4">
         {recomendacionesIA.map((recomendacion, index) => (
-          <li key={index} className="p-4 bg-gray-100 rounded-lg shadow-md">
+          <li
+            key={index}
+            className="p-4 bg-white rounded-lg shadow-md border-4 border-purple-500"
+          >
             <h3 className="text-xl font-semibold text-gray-700 mb-2">
               {recomendacion.question}
             </h3>

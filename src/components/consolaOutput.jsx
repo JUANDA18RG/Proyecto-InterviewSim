@@ -1,6 +1,26 @@
 import PropTypes from "prop-types";
 
+// Función para decodificar base64 a string
+function decodeBase64(str) {
+  if (!str) return "";
+  try {
+    return atob(str);
+  } catch (e) {
+    console.error("Error decoding base64:", e);
+    try {
+      // eslint-disable-next-line no-undef
+      return Buffer.from(str, "base64").toString("utf-8");
+    } catch {
+      return str;
+    }
+  }
+}
+
 const ConsolaOutput = ({ outputDetails }) => {
+  console.log(
+    "ConsolaOutput component rendered with outputDetails:",
+    outputDetails
+  );
   const getOutput = () => {
     if (!outputDetails) return "No hay salida para mostrar.";
 
@@ -10,14 +30,15 @@ const ConsolaOutput = ({ outputDetails }) => {
       // Compilation error
       return (
         <pre className="px-2 py-1 font-normal text-xs text-red-500">
-          {outputDetails?.compile_output || "No compilation output available."}
+          {decodeBase64(outputDetails?.compile_output) ||
+            "No compilation output available."}
         </pre>
       );
     } else if (statusId === 3) {
       // Successful execution
       return (
         <pre className="px-2 py-1 font-normal text-xs text-green-500">
-          {outputDetails?.stdout || "No output available."}
+          {decodeBase64(outputDetails?.stdout) || "No output available."}
         </pre>
       );
     } else if (statusId === 5) {
@@ -37,7 +58,7 @@ const ConsolaOutput = ({ outputDetails }) => {
     } else {
       return (
         <pre className="px-2 py-1 font-normal text-xs text-red-500">
-          {outputDetails?.stderr || "An error occurred."}
+          {decodeBase64(outputDetails?.stderr) || "An error occurred."}
         </pre>
       );
     }

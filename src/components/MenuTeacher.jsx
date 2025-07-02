@@ -1,9 +1,12 @@
 import Logo from "../assets/Logo.png";
 import { useState } from "react";
 import Protypes from "prop-types";
+import { useTheme } from "../context/themeContext";
+import { t } from "../i18n";
 
 function MenuTeacher({ onMenuItemChange }) {
   const [selectedMenuItem, setSelectedMenuItem] = useState("create");
+  const { language } = useTheme();
 
   const handleMenuItemClick = (menuItem) => {
     onMenuItemChange(menuItem);
@@ -11,7 +14,7 @@ function MenuTeacher({ onMenuItemChange }) {
   };
 
   return (
-    <div className="h-full  rounded-lg flex flex-col items-center justify-center bg-gradient-to-r from-purple-300  to-rose-400 p-8 shadow-xl">
+    <div className="h-full rounded-lg flex flex-col items-center justify-center bg-[#283e56] p-8 shadow-xl">
       <div className="p-4 flex items-center justify-center cursor-pointer mb-8">
         <img
           src={Logo}
@@ -25,10 +28,10 @@ function MenuTeacher({ onMenuItemChange }) {
       <div className="flex flex-col items-center justify-center w-full space-y-8">
         <button
           onClick={() => handleMenuItemClick("create")}
-          className={`px-6 py-4 flex items-center justify-center font-bold text-lg rounded-lg bg-white text-gray-900 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ${
+          className={`px-6 py-4 flex items-center justify-center font-bold text-lg rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 border-2 ${
             selectedMenuItem === "create"
-              ? "bg-gradient-to-t from-blue-600 to-blue-500 text-white border-2 border-white"
-              : ""
+              ? "bg-[#283e56] text-[#ffd700] border-[#ffd700]"
+              : "bg-[#111827] text-white border-transparent hover:bg-[#4fc3f7] hover:text-[#283e56]"
           }`}
         >
           <svg
@@ -45,14 +48,14 @@ function MenuTeacher({ onMenuItemChange }) {
               d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
-          Crear Entrevista
+          {t('create_interview', language)}
         </button>
         <button
           onClick={() => handleMenuItemClick("view")}
-          className={`px-6 py-4 flex items-center justify-center font-bold text-lg rounded-lg bg-white text-gray-900 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ${
+          className={`px-6 py-4 flex items-center justify-center font-bold text-lg rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 border-2 ${
             selectedMenuItem === "view"
-              ? "bg-gradient-to-t from-blue-600 to-blue-500 text-white border-2 border-white"
-              : ""
+              ? "bg-[#283e56] text-[#ffd700] border-[#ffd700]"
+              : "bg-[#111827] text-white border-transparent hover:bg-[#4fc3f7] hover:text-[#283e56]"
           }`}
         >
           <svg
@@ -74,11 +77,15 @@ function MenuTeacher({ onMenuItemChange }) {
               d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
             />
           </svg>
-          Ver Entrevistas
+          {t('view_interviews', language)}
         </button>
         <button
-          to="/ver-estadisticas"
-          className="px-6 py-4 flex items-center justify-center font-bold text-lg rounded-lg bg-white text-gray-900 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
+          onClick={() => handleMenuItemClick("stats")}
+          className={`px-6 py-4 flex items-center justify-center font-bold text-lg rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 border-2 ${
+            selectedMenuItem === "stats"
+              ? "bg-[#283e56] text-[#ffd700] border-[#ffd700]"
+              : "bg-[#111827] text-white border-transparent hover:bg-[#4fc3f7] hover:text-[#283e56]"
+          }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +101,7 @@ function MenuTeacher({ onMenuItemChange }) {
               d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
-          Ver Estadísticas
+          {t('view_stats', language)}
         </button>
       </div>
     </div>

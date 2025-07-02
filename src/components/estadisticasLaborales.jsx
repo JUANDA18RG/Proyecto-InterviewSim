@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Spinner from "./spinner";
 import {
   BarChart,
   Bar,
@@ -9,31 +10,31 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { mostrarInfoRequest } from "../api/interview";
+import { useTheme } from "../context/themeContext";
+import { t } from "../i18n";
 
 function EstadisticasLaborales() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { language } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const DatosInfo = await mostrarInfoRequest();
-        const respuesta = DatosInfo.data.info.data || [];
-        console.log("Datos obtenidos:", respuesta);
+        console.log("Respuesta completa de la API:", DatosInfo);
+
+        // Extraer los datos de la respuesta
+        const respuesta = DatosInfo.data || [];
+        console.log("Datos obtenidos del backend:", respuesta);
 
         // Formatear los datos obtenidos
-        const formattedData = respuesta.map((item) => {
-          // Verificar si totalInterviews es una cadena antes de eliminar las comas y convertirla a número
-          const totalInterviews =
-            typeof item.totalInterviews === "string"
-              ? Number(item.totalInterviews.replace(/,/g, ""))
-              : Number(item.totalInterviews);
-          return {
-            country: item.country,
-            totalInterviews: isNaN(totalInterviews) ? 0 : totalInterviews,
-          };
-        });
+        const formattedData = respuesta.data.map((item, index) => ({
+          id: `${item.country}-${index}`,
+          country: item.country || "Desconocido",
+          totalInterviews: item.totalInterviews || 0,
+        }));
 
         console.log("Datos formateados:", formattedData);
         setData(formattedData);
@@ -50,49 +51,44 @@ function EstadisticasLaborales() {
   if (loading) {
     return (
       <div className="flex justify-center items-center w-full h-full relative">
-        <div role="status" className="flex flex-col items-center">
-          <svg
-            aria-hidden="true"
-            className="w-28 h-28 animate-spin"
-            viewBox="0 0 100 101"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#00bfff" />
-                <stop offset="50%" stopColor="#ff69b4" />
-                <stop offset="100%" stopColor="#32cd32" />
-              </linearGradient>
-            </defs>
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              stroke="url(#gradient)"
-              strokeWidth="10"
-              strokeLinecap="round"
-              fill="none"
-              strokeDasharray="283"
-              strokeDashoffset="75"
-            />
-          </svg>
-        </div>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        <p className="text-gray-500 text-lg">
+          {t("no_data_available", language)}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-lg">
+    <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-lg p-4">
       <div className="flex flex-col justify-center items-center h-full w-full">
         <h1 className="text-lg font-bold m-3 text-gray-400">
-          Estadísticas de entrevistas técnicas en el 2024
+          {t("laboral_stats_title", language).replace(
+            "{{year}}",
+            new Date().getFullYear()
+          )}
         </h1>
         <div className="p-1 flex items-center justify-center h-full w-full m-5">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={data} // Utiliza los datos obtenidos de la API
+              data={data}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
             >
+              <defs>
+                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#0f52ba" />{" "}
+                  {/* Azul metalizado */}
+                  <stop offset="50%" stopColor="#87ceeb" /> {/* Azul celeste */}
+                  <stop offset="100%" stopColor="#ffd700" /> {/* Dorado */}
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="country"
@@ -109,8 +105,8 @@ function EstadisticasLaborales() {
               />
               <Tooltip />
               <Bar
-                dataKey="totalInterviews" // El eje Y muestra el total de entrevistas
-                fill="rgba(136, 84, 216, 0.5)"
+                dataKey="totalInterviews"
+                fill="url(#barGradient)"
                 stroke="#8884d8"
               />
             </BarChart>

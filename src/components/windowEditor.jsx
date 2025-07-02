@@ -15,7 +15,6 @@ const WindowEditor = ({ onChange, language, code }) => {
       <Editor
         language={language}
         value={value}
-        defaultValue="//Bienvenido al editor de código de InterviewSim"
         onChange={handleEditorChange}
         theme="vs-dark"
         options={{

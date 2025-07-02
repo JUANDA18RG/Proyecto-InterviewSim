@@ -1,84 +1,60 @@
 import { useState, useEffect } from "react";
 import { getInterviewsRequest } from "../api/interview";
 import { Link } from "react-router-dom";
+import Spinner from "./spinner";
+import { useTheme } from "../context/themeContext";
+import { t } from "../i18n";
+import FiltersInterview from "./FiltersInterview";
 
 function PanelInterviews() {
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { language } = useTheme();
+
+  const fetchInterviews = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const response = await getInterviewsRequest(filters);
+      setInterviews(response.data);
+    } catch (error) {
+      console.error(
+        "Error al traer las entrevistas:",
+        error.response ? error.response.data : error.message
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchInterviews = async () => {
-      try {
-        const response = await getInterviewsRequest();
-        setInterviews(response.data);
-      } catch (error) {
-        console.error(
-          "Error al traer las entrevistas:",
-          error.response ? error.response.data : error.message
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInterviews();
+    fetchInterviews(); // Carga inicial sin filtros
   }, []);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center w-full h-full min-h-screen relative">
-        <div role="status" className="flex flex-col items-center">
-          <svg
-            aria-hidden="true"
-            className="w-28 h-28 animate-spin"
-            viewBox="0 0 100 101"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#00bfff" />
-                <stop offset="50%" stopColor="#ff69b4" />
-                <stop offset="100%" stopColor="#32cd32" />
-              </linearGradient>
-            </defs>
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              stroke="url(#gradient)"
-              strokeWidth="10"
-              strokeLinecap="round"
-              fill="none"
-              strokeDasharray="283"
-              strokeDashoffset="75"
-            />
-          </svg>
-
-          <span className="absolute text-center text-gray-400 text-xl bottom-10">
-            Cargando...
-          </span>
-        </div>
+        <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full w-full bg-gradient-to-r from-lime-300 via-red-100 to-purple-200 rounded-lg  overflow-hidden">
-      <div
-        className="flex flex-col w-full h-full p-5 space-y-5 overflow-y-auto"
-        key={interviews.title}
-      >
+    <div className="flex h-full w-full bg-gradient-to-r from-[#283e56] to-[#4fc3f7] rounded-lg overflow-hidden">
+      <div className="flex flex-col w-full h-full p-5 space-y-5 overflow-y-auto panel-interviews-scroll">
+        <FiltersInterview fetchInterviews={fetchInterviews} />
         {interviews.map((interview) => (
           <div
-            key={interview.id}
-            className="flex flex-col bg-white rounded-lg p-5 space-y-5 mb-5"
+            key={interview._id}
+            className="flex flex-col bg-white dark:bg-gray-800 border border-[#ffd700] dark:border-yellow-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ffd700] text-[#283e56] dark:text-white p-3 rounded-lg space-y-3"
           >
             <h2 className="text-lg font-bold">{interview.title}</h2>
             <p>{interview.description}</p>
             <div className="space-y-2">
-              <p className="text-gray-500">Empresa: {interview.empresa}</p>
-              <p className="text-gray-500">
-                Tipo de entrevista: {interview.tipoEntrevista}
+              <p className="text-gray-700">
+                {t("company", language)}: {interview.empresa}
+              </p>
+              <p className="text-gray-700">
+                {t("interview_type", language)}: {interview.tipoEntrevista}
               </p>
             </div>
             <div className="flex w-full justify-between items-center">
@@ -87,10 +63,12 @@ function PanelInterviews() {
                 rel="noreferrer"
                 className="text-blue-500 cursor-pointer"
               >
-                Hacer entrevista
+                {t("making_interview", language)}
               </Link>
               <div className="flex space-x-1 items-center justify-center">
-                <span className="text-gray-500">Dificultad:</span>
+                <span className="text-gray-700">
+                  {t("difficulty", language)}
+                </span>
                 <p className="m-1"> {interview.Dificultad}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
